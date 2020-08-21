@@ -1,17 +1,19 @@
 ## Overview of Lempel-Ziv-Welch Algorithm
 
-<button type="button" ahref=https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd.newsweek.com%2Fen%2Ffull%2F973719%2Famerican-flag.jpg&f=1&nofb=1 >.</button>
+<button type="button" ahref="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd.newsweek.com%2Fen%2Ffull%2F973719%2Famerican-flag.jpg" >.</button>
 
 LZW uses patterns in documents to reduce the size of the document, 
 replacing patterns with references. Rather than encoding by character, 
-it replaces groups of characters of size 1+ with a code. This method 
+it replaces groups of characters of size 1+ with a code. Unlike other 
+lossless compression methods it uses a dictionary to match characters to 
+codes. This method 
 works when encoding and decoding, allowing for a completely lossless 
 compression algorithm.  
 
 The algorithm does not require the probability distribution of symbols 
 which makes the algorithm usable for any input and saves time by only 
 taking one pass to build its dictionary. This means there is no space 
-overhead when transmitting required to compress/decompress. 
+overhead when compressing/decompressing. 
 
 ## Algorithm 
 In both compression and decompression, a dictionary is dynamically built 
@@ -22,12 +24,12 @@ ASCII the single characters are assigned their ASCII values which range
 from 0-255. Every additional pattern uses a code above that range, starting 
 from 256. 
 
-### Compression
-Compression uses two variables:
+The algorithm uses two variables:
   - P : Accumulation of symbols read that already exist in the dictionary. 
-        initiated by an empty symbol 
-  - C : Currently read symbol 
+        It is initiated by an empty symbol. 
+  - C : Currently read symbol of the document. 
 
+### Compression
 The document is read symbol by symbol. At each symbol, concatenate P and C 
 to get the current pattern. If this pattern exists in the dictionary then 
 no output is needed and P is set as the concatenation. If the pattern does 
@@ -56,6 +58,7 @@ compression = compression.dict[p]
 #### Example 
 This is applied for the word IMUSINGVIMINMUSING 
 
+##### ASCII Table for Relevant Symbols
 | Symbol | ASCII | 
 | --- | --- | 
 | I | 73 | 
@@ -66,6 +69,7 @@ This is applied for the word IMUSINGVIMINMUSING
 | G | 71 |
 | V | 86 | 
 
+##### Step by Step Breakdown
 | P | C | Output | Code | Symbols | 
 | --- | --- | --- | --- | --- | 
 | EMPTY | I | | 73 | I |
@@ -117,6 +121,7 @@ You can use the [editor on GitHub](https://github.com/Moop204/lzw-implementation
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ## References
+https://rosettacode.org/wiki/LZW_compression 
 
 ### Markdown
 
