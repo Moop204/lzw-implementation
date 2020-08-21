@@ -1,6 +1,7 @@
 ## Overview of Lempel-Ziv-Welch Algorithm
 
 <button type="button">TEST BUTTON IGNORE</button>
+<iframe src="https://www.google.com/webhp?igu=1"></iframe>
 
 LZW uses patterns in documents to reduce the size of the document, 
 replacing patterns with references. Rather than encoding by character, 
@@ -12,7 +13,6 @@ it replaces groups of characters of size 1+ with a code.
 * Dynamically created dictionary
 * Lossless
 
-                                                                               |
 The algorithm does not require the probability distribution of symbols 
 which makes the algorithm usable for any input and saves time by only 
 taking one pass to build its dictionary. This means there is no space 
@@ -62,6 +62,7 @@ compression = compression.dict[p]
 This is applied for the word IMUSINGVIMINMUSING 
 
 | Symbol | ASCII | 
+| --- | --- | 
 | I | 73 | 
 | M | 77 | 
 | U | 85 |  
@@ -70,7 +71,8 @@ This is applied for the word IMUSINGVIMINMUSING
 | G | 71 |
 | V | 86 | 
 
-| P | C | compression | symbol | code | 
+| P | C | Output | Code | Symbols | 
+| --- | --- | --- | --- | --- | 
 | EMPTY | I | | 73 | I |
 | I | M | 73 | 256 | IM | 
 | M | U | 77 | 257 | MU | 
@@ -90,10 +92,30 @@ This is applied for the word IMUSINGVIMINMUSING
 | SI | N | 259 | 267 | SIN | 
 | N | G | 261 |     |    | 
 
-As such this produces the code: 
+As such this produces the code: <br> 
 <73><77><85><83><73><78><71><86><256><260><257><259><261> 
 
 This is made up of only 13 symbols compared to the original 18. 
+
+## Decompression 
+This process is very similar to compression. By traversing through the 
+encoded string and building the dictionary the symbols are correctly 
+defined before they are needed.  
+
+For ASCII strings we know the first 255 values and they are included in  
+the dictionary in the beginning. 
+
+In this case P starts empty like before. For each symbol its dictionary 
+value is taken as output as the dictionary maps the code to symbols. 
+The concatenation of P and the dictionary entry taken is added to the 
+dictionary with the new code generated in the same manner as the encoder. 
+The value of P is then taken as the value given to the output. 
+
+WIP MISSING A CASE 
+
+
+
+### Example 
 
 You can use the [editor on GitHub](https://github.com/Moop204/lzw-implementation/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
