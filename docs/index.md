@@ -1,17 +1,12 @@
 ## Overview of Lempel-Ziv-Welch Algorithm
 
-<button type="button">TEST BUTTON IGNORE</button>
-<iframe src="https://www.google.com/webhp?igu=1"></iframe>
+<button type="button" ahref=https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd.newsweek.com%2Fen%2Ffull%2F973719%2Famerican-flag.jpg&f=1&nofb=1 >.</button>
 
 LZW uses patterns in documents to reduce the size of the document, 
 replacing patterns with references. Rather than encoding by character, 
-it replaces groups of characters of size 1+ with a code. 
-
-
-### Features
-* Universal coding 
-* Dynamically created dictionary
-* Lossless
+it replaces groups of characters of size 1+ with a code. This method 
+works when encoding and decoding, allowing for a completely lossless 
+compression algorithm.  
 
 The algorithm does not require the probability distribution of symbols 
 which makes the algorithm usable for any input and saves time by only 
