@@ -1,7 +1,5 @@
 ## Overview of Lempel-Ziv-Welch Algorithm
 
-<button type="button" ahref="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd.newsweek.com%2Fen%2Ffull%2F973719%2Famerican-flag.jpg" >.</button>
-
 LZW uses patterns in documents to reduce the size of the document, 
 replacing patterns with references. Rather than encoding by character, 
 it replaces groups of characters of size 1+ with a code. Unlike other 
@@ -15,7 +13,11 @@ which makes the algorithm usable for any input and saves time by only
 taking one pass to build its dictionary. This means there is no space 
 overhead when compressing/decompressing. 
 
+The compression algorithm is best used with documents that contain 
+more repetitive patterns. 
+
 ## Algorithm 
+
 In both compression and decompression, a dictionary is dynamically built 
 which describes the output. 
   
@@ -30,6 +32,7 @@ The algorithm uses two variables:
   - C : Currently read symbol of the document. 
 
 ### Compression
+
 The document is read symbol by symbol. At each symbol, concatenate P and C 
 to get the current pattern. If this pattern exists in the dictionary then 
 no output is needed and P is set as the concatenation. If the pattern does 
@@ -59,6 +62,7 @@ compression = compression.dict[p]
 This is applied for the word IMUSINGVIMINMUSING 
 
 ##### ASCII Table for Relevant Symbols
+
 | Symbol | ASCII | 
 | --- | --- | 
 | I | 73 | 
@@ -70,6 +74,7 @@ This is applied for the word IMUSINGVIMINMUSING
 | V | 86 | 
 
 ##### Step by Step Breakdown
+
 | P | C | Output | Code | Symbols | 
 | --- | --- | --- | --- | --- | 
 | EMPTY | I | | 73 | I |
@@ -106,51 +111,58 @@ the dictionary in the beginning.
 
 In this case P starts empty like before. For each symbol its dictionary 
 value is taken as output as the dictionary maps the code to symbols. 
-The concatenation of P and the dictionary entry taken is added to the 
+The concatenation of P and the first symbol of the dictionary value taken is added to the 
 dictionary with the new code generated in the same manner as the encoder. 
 The value of P is then taken as the value given to the output. 
 
-WIP MISSING A CASE 
+A special case exists when a new entry is added to the dictionary and is 
+immediately used after during compression. This leads to the entry not 
+being dynamically built in time with the previous algorithm. In such 
+cases the first character of the prefix P is added to the end of P for 
+the output. This can be seen with the encoding of ABABABAB
 
-
-
-### Example 
-
-You can use the [editor on GitHub](https://github.com/Moop204/lzw-implementation/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-## References
-https://rosettacode.org/wiki/LZW_compression 
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+result = empty
+p = empty 
+FOREACH c IN document 
+  IF(EXIST(dict[c]))
+    current = dict[c] 
+  ELSE 
+    current = p.p[0]
+  result = result.current 
+  new_entry = p.current
+  dict[new_entry] = addNewCode() 
+  p = dict[c]
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Example
 
-### Jekyll Themes
+This example uses the output taken from the previous example. 
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Moop204/lzw-implementation/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+<73><77><85><83><73><78><71><86><256><260><257><259><261> 
 
-### Support or Contact
+##### Step by Step Breakdown
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+| P | C | Output | Code | Symbols | 
+| --- | --- | --- | --- | --- | 
+| EMPTY | 73 | I | 73 | I | 
+| I | 77 | M | 256 | IM | 
+| M | 85 | U | 257 | MU | 
+| U | 83 | S | 258 | US |
+| S | 73 | I | 259 | SI | 
+| I | 78 | N | 260 | IN |
+| N | 71 | G | 261 | NG | 
+| G | 86 | V | 262 | GV | 
+| V | 256 | IM | 263 | VI | 
+| IM | 260 | IN | 264 | IMI | 
+| IN | 257 | MU | 265 | INM | 
+| MU | 259 | SI | 266 | MUS | 
+| SI | 261 | NG | 267 | SIN | 
+
+
+## References
+
+[Rosetta Code](https://rosettacode.org/wiki/LZW_compression) 
+[Prepressure](https://www.prepressure.com/library/compression-algorithm/lzw)
+[GeeksForGeeks](https://www.geeksforgeeks.org/lzw-lempel-ziv-welch-compression-technique/)
+
